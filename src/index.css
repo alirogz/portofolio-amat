@@ -1,0 +1,165 @@
+:root {
+  /* Colors - Monochromatic with one sharp accent */
+  --color-bg: #0a0a0a;
+  --color-surface: #121212;
+  --color-surface-elevated: #1a1a1a;
+  
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #a3a3a3;
+  --color-text-inverse: #0a0a0a;
+  
+  /* Primary Accent: Blaze Orange (User preference) */
+  --color-primary: #ff5f2e; 
+  --color-primary-dim: rgba(255, 95, 46, 0.1);
+  --color-primary-hover: #ff754d;
+  
+  --color-border: #262626;
+
+  /* Typography - Clean Sans System */
+  --font-display: 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-label: 'JetBrains Mono', monospace;
+
+  /* Spacing */
+  --spacing-container: 1440px;
+  --spacing-gutter: 24px;
+  --spacing-section: 120px;
+  --spacing-stack-sm: 12px;
+  --spacing-stack-md: 24px;
+  --spacing-stack-lg: 48px;
+
+  /* Shape Consistency Lock (Mandatory)
+   * Rule: Buttons = full-pill (9999px), Cards = 24px, Inputs/Small = 12px
+   */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px; /* Project cards & Bento */
+  --radius-full: 9999px; /* Pill buttons */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Base Utility Classes */
+.container {
+  max-width: var(--spacing-container);
+  margin: 0 auto;
+  padding: 0 var(--spacing-gutter);
+}
+
+.text-display-lg {
+  font-family: var(--font-display);
+  font-size: 80px;
+  font-weight: 800;
+  line-height: 90px;
+  letter-spacing: -0.04em;
+}
+
+.text-headline-md {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 48px;
+  letter-spacing: -0.02em;
+}
+
+.text-body-lg {
+  font-family: var(--font-body);
+  font-size: 20px;
+}
+
+.text-label {
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Selection Highlight */
+::selection {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .text-display-lg {
+    font-size: 48px;
+    line-height: 52px;
+    letter-spacing: -0.03em;
+  }
+}
+
+/* Secret Easter Egg Trigger */
+.secret-trigger {
+  cursor: pointer;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+.secret-trigger:hover {
+  color: var(--color-primary) !important;
+  text-shadow: 0 0 8px rgba(255, 95, 46, 0.4);
+}
+
+/* Secret Cyberpunk Theme Overrides */
+body.cyberpunk-mode {
+  --color-bg: #05020a;
+  --color-surface: #100421;
+  --color-surface-elevated: #1b0738;
+  --color-primary: #00f3ff;
+  --color-primary-dim: #00f3ff33;
+  --color-secondary: #ff00ff;
+  --color-text-primary: #e0d5f2;
+  --color-border: #ff00ff44;
+  --font-display: 'JetBrains Mono', monospace;
+  background-color: var(--color-bg);
+}
+
+body.cyberpunk-mode .text-display-lg,
+body.cyberpunk-mode .text-headline-md {
+  text-shadow: 3px 3px 0px rgba(255, 0, 255, 0.8), -3px -3px 0px rgba(0, 243, 255, 0.8);
+  font-style: italic;
+  letter-spacing: -0.05em;
+}
+
+body.cyberpunk-mode img {
+  filter: hue-rotate(180deg) saturate(2) contrast(1.2) !important;
+}
