@@ -1,8 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 export default function FooterSection() {
   const containerRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -19,7 +27,7 @@ export default function FooterSection() {
       id="contact" 
       style={{ 
         position: 'relative', 
-        minHeight: '80vh', 
+        minHeight: isMobile ? 'auto' : '80vh', 
         background: '#0a0a0a',
         display: 'flex',
         flexDirection: 'column',
@@ -31,21 +39,32 @@ export default function FooterSection() {
       <div style={{ width: '100%', height: '1px', background: 'linear-gradient(90deg, transparent, var(--color-primary), transparent)', opacity: 0.5 }}></div>
 
       {/* Massive Typography Container */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', minHeight: '30vh', marginTop: '40px' }}>
+      <div style={{ 
+        flex: isMobile ? 'none' : 1, 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        position: 'relative', 
+        minHeight: isMobile ? '20vh' : '30vh', 
+        marginTop: isMobile ? '24px' : '40px',
+        overflow: 'hidden'
+      }}>
         <motion.h2 
           style={{ 
-            scale, 
-            fontSize: 'clamp(40px, 10vw, 150px)', 
+            scale: isMobile ? 1 : scale, 
+            fontSize: isMobile ? '32px' : 'clamp(40px, 10vw, 150px)', 
             fontWeight: '700', 
             margin: 0, 
             lineHeight: 1,
             color: 'transparent',
-            WebkitTextStroke: '2px rgba(255,255,255,0.8)',
+            WebkitTextStroke: isMobile ? '1px rgba(255,255,255,0.8)' : '2px rgba(255,255,255,0.8)',
             textTransform: 'uppercase',
-            whiteSpace: 'nowrap',
+            whiteSpace: isMobile ? 'normal' : 'nowrap',
+            textAlign: 'center',
             letterSpacing: '-0.02em',
             position: 'absolute',
-            pointerEvents: 'none'
+            pointerEvents: 'none',
+            width: isMobile ? '90%' : undefined
           }}
         >
           Mari Berdiskusi
@@ -53,54 +72,56 @@ export default function FooterSection() {
         
         <motion.h2 
           style={{ 
-            scale, 
-            fontSize: 'clamp(40px, 10vw, 150px)', 
+            scale: isMobile ? 1 : scale, 
+            fontSize: isMobile ? '32px' : 'clamp(40px, 10vw, 150px)', 
             fontWeight: '700', 
             margin: 0, 
             lineHeight: 1,
             color: 'var(--color-primary)',
             textTransform: 'uppercase',
-            whiteSpace: 'nowrap',
+            whiteSpace: isMobile ? 'normal' : 'nowrap',
+            textAlign: 'center',
             letterSpacing: '-0.02em',
             position: 'absolute',
             pointerEvents: 'none',
-            clipPath: 'polygon(0 50%, 100% 50%, 100% 100%, 0% 100%)'
+            clipPath: 'polygon(0 50%, 100% 50%, 100% 100%, 0% 100%)',
+            width: isMobile ? '90%' : undefined
           }}
         >
           Mari Berdiskusi
         </motion.h2>
       </div>
 
-      {/* Contact Form & Links Vertical Stack */}
+      {/* Contact Form & Links */}
       <motion.div 
-        style={{ opacity, y }}
+        style={{ opacity: isMobile ? 1 : opacity, y: isMobile ? 0 : y }}
         className="container"
       >
         <div style={{
-          padding: '40px var(--spacing-gutter) 80px var(--spacing-gutter)',
+          padding: isMobile 
+            ? '32px var(--spacing-gutter) 48px' 
+            : '40px var(--spacing-gutter) 80px var(--spacing-gutter)',
           display: 'flex',
           flexDirection: 'column',
-          gap: '80px',
+          gap: isMobile ? '48px' : '80px',
         }}>
           
-          {/* 2-Column Contact Section */}
+          {/* Contact Section */}
           <div style={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-            gap: '80px', 
+            gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', 
+            gap: isMobile ? '48px' : '80px', 
             width: '100%', 
             maxWidth: '1200px', 
             margin: '0 auto' 
           }}>
             
-            {/* Left Column: Form Kontak Web3Forms */}
+            {/* Form Kontak */}
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span className="text-label" style={{ color: 'var(--color-primary)', display: 'block', marginBottom: '32px' }}>KIRIM PESAN (VIA EMAIL)</span>
+              <span className="text-label" style={{ color: 'var(--color-primary)', display: 'block', marginBottom: isMobile ? '20px' : '32px' }}>KIRIM PESAN (VIA EMAIL)</span>
               
-              <form action="https://api.web3forms.com/submit" method="POST" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+              <form action="https://api.web3forms.com/submit" method="POST" style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '24px' : '32px' }}>
                 <input type="hidden" name="access_key" value="76940eb2-2c60-4c22-bf80-262e36df4d2f" />
-                
-                {/* Optional: Redirect setelah berhasil */}
                 <input type="hidden" name="redirect" value="https://web3forms.com/success" />
                 
                 <div style={{ position: 'relative' }}>
@@ -114,8 +135,8 @@ export default function FooterSection() {
                       background: 'transparent',
                       border: 'none',
                       borderBottom: '1px solid rgba(255,255,255,0.2)',
-                      padding: '16px 0',
-                      fontSize: '18px',
+                      padding: isMobile ? '12px 0' : '16px 0',
+                      fontSize: '16px',
                       color: 'var(--color-text-primary)',
                       outline: 'none',
                       transition: 'border-color 0.3s'
@@ -136,8 +157,8 @@ export default function FooterSection() {
                       background: 'transparent',
                       border: 'none',
                       borderBottom: '1px solid rgba(255,255,255,0.2)',
-                      padding: '16px 0',
-                      fontSize: '18px',
+                      padding: isMobile ? '12px 0' : '16px 0',
+                      fontSize: '16px',
                       color: 'var(--color-text-primary)',
                       outline: 'none',
                       transition: 'border-color 0.3s'
@@ -147,7 +168,7 @@ export default function FooterSection() {
                   />
                 </div>
 
-                <div style={{ position: 'relative', marginBottom: '16px' }}>
+                <div style={{ position: 'relative', marginBottom: isMobile ? '8px' : '16px' }}>
                   <textarea 
                     name="message" 
                     placeholder="Ceritakan tentang proyek Anda..." 
@@ -158,8 +179,8 @@ export default function FooterSection() {
                       background: 'transparent',
                       border: 'none',
                       borderBottom: '1px solid rgba(255,255,255,0.2)',
-                      padding: '16px 0',
-                      fontSize: '18px',
+                      padding: isMobile ? '12px 0' : '16px 0',
+                      fontSize: '16px',
                       color: 'var(--color-text-primary)',
                       outline: 'none',
                       transition: 'border-color 0.3s',
@@ -172,21 +193,22 @@ export default function FooterSection() {
 
                 <motion.button
                   type="submit"
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={isMobile ? undefined : { scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   style={{
-                    alignSelf: 'flex-start',
-                    padding: '16px 40px',
+                    alignSelf: isMobile ? 'stretch' : 'flex-start',
+                    padding: isMobile ? '14px 32px' : '16px 40px',
                     borderRadius: '100px',
                     border: '1px solid var(--color-primary)',
                     background: 'var(--color-primary)',
                     color: '#fff',
-                    fontSize: '14px',
+                    fontSize: isMobile ? '13px' : '14px',
                     fontFamily: 'var(--font-label)',
                     letterSpacing: '0.1em',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
+                    justifyContent: 'center',
                     gap: '12px',
                     transition: 'all 0.3s',
                   }}
@@ -196,12 +218,12 @@ export default function FooterSection() {
               </form>
             </div>
 
-            {/* Right Column: WhatsApp & Kontak Cepat */}
+            {/* WhatsApp & Kontak Cepat */}
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span className="text-label" style={{ color: 'var(--color-primary)', display: 'block', marginBottom: '32px' }}>ATAU CHAT LANGSUNG</span>
+              <span className="text-label" style={{ color: 'var(--color-primary)', display: 'block', marginBottom: isMobile ? '20px' : '32px' }}>ATAU CHAT LANGSUNG</span>
               
-              <div style={{ marginBottom: '48px' }}>
-                <p className="text-body-lg" style={{ color: 'var(--color-text-secondary)', marginBottom: '32px', fontSize: '18px' }}>
+              <div style={{ marginBottom: isMobile ? '32px' : '48px' }}>
+                <p className="text-body-lg" style={{ color: 'var(--color-text-secondary)', marginBottom: isMobile ? '20px' : '32px', fontSize: isMobile ? '15px' : '18px' }}>
                   Lebih nyaman berdiskusi secara langsung? Silakan hubungi saya via WhatsApp untuk respons yang lebih cepat.
                 </p>
                 
@@ -210,17 +232,18 @@ export default function FooterSection() {
                   target="_blank"
                   rel="noreferrer"
                   style={{
-                    padding: '16px 40px',
+                    padding: isMobile ? '14px 32px' : '16px 40px',
                     borderRadius: '100px',
-                    background: '#25D366', // WhatsApp Green
+                    background: '#25D366',
                     color: '#fff',
                     textDecoration: 'none',
-                    fontSize: '14px',
+                    fontSize: isMobile ? '13px' : '14px',
                     fontFamily: 'var(--font-label)',
                     letterSpacing: '0.05em',
                     fontWeight: 'bold',
                     transition: 'transform 0.2s',
-                    display: 'inline-block'
+                    display: isMobile ? 'block' : 'inline-block',
+                    textAlign: 'center'
                   }}
                   onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'}
                   onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
@@ -230,14 +253,14 @@ export default function FooterSection() {
               </div>
 
               {/* Info Tambahan */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '40px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: isMobile ? '20px' : '32px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: isMobile ? '24px' : '40px' }}>
                 <div>
-                  <span className="text-label" style={{ color: 'var(--color-text-secondary)', display: 'block', marginBottom: '12px', fontSize: '12px' }}>SOSIAL MEDIA</span>
+                  <span className="text-label" style={{ color: 'var(--color-text-secondary)', display: 'block', marginBottom: '8px', fontSize: '11px' }}>SOSIAL MEDIA</span>
                   <a 
                     href="https://instagram.com/abimanyu_putra21" 
                     target="_blank"
                     rel="noreferrer"
-                    style={{ color: 'var(--color-text-primary)', textDecoration: 'none', transition: 'color 0.3s ease' }}
+                    style={{ color: 'var(--color-text-primary)', textDecoration: 'none', transition: 'color 0.3s ease', fontSize: isMobile ? '14px' : undefined }}
                     onMouseOver={(e) => e.target.style.color = 'var(--color-primary)'}
                     onMouseOut={(e) => e.target.style.color = 'var(--color-text-primary)'}
                   >
@@ -246,13 +269,13 @@ export default function FooterSection() {
                 </div>
                 
                 <div>
-                  <span className="text-label" style={{ color: 'var(--color-text-secondary)', display: 'block', marginBottom: '12px', fontSize: '12px' }}>LOKASI</span>
-                  <span style={{ color: 'var(--color-text-primary)' }}>Indonesia</span>
+                  <span className="text-label" style={{ color: 'var(--color-text-secondary)', display: 'block', marginBottom: '8px', fontSize: '11px' }}>LOKASI</span>
+                  <span style={{ color: 'var(--color-text-primary)', fontSize: isMobile ? '14px' : undefined }}>Indonesia</span>
                 </div>
 
                 <div style={{ gridColumn: '1 / -1' }}>
-                  <span className="text-label" style={{ color: 'var(--color-text-secondary)', display: 'block', marginBottom: '12px', fontSize: '12px' }}>EMAIL</span>
-                  <span style={{ color: 'var(--color-text-primary)' }}>ahmadabimanyuputra7@gmail.com</span>
+                  <span className="text-label" style={{ color: 'var(--color-text-secondary)', display: 'block', marginBottom: '8px', fontSize: '11px' }}>EMAIL</span>
+                  <span style={{ color: 'var(--color-text-primary)', fontSize: isMobile ? '13px' : undefined, wordBreak: 'break-all' }}>ahmadabimanyuputra7@gmail.com</span>
                 </div>
               </div>
 

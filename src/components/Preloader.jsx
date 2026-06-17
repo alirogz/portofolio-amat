@@ -3,6 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Preloader({ onComplete }) {
   const [counter, setCounter] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth <= 768);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -11,13 +16,12 @@ export default function Preloader({ onComplete }) {
           clearInterval(interval);
           setTimeout(() => {
             if (onComplete) onComplete();
-          }, 400); // Tunggu sebentar di 100% sebelum animasi menghilang
+          }, 400);
           return 100;
         }
-        // Naikkan angka secara acak untuk kesan natural, dipercepat
         return prev + Math.floor(Math.random() * 25) + 5;
       });
-    }, 20); // Interval lebih cepat
+    }, 20);
 
     return () => clearInterval(interval);
   }, [onComplete]);
@@ -34,21 +38,25 @@ export default function Preloader({ onComplete }) {
         width: '100vw',
         height: '100vh',
         backgroundColor: '#0a0a0a',
-        zIndex: 99999, // Harus paling atas
+        zIndex: 99999,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        padding: '40px 80px',
+        padding: isMobile ? '32px 24px' : '40px 80px',
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-        <p className="text-label" style={{ color: 'var(--color-primary)', fontSize: '24px', letterSpacing: '0.2em' }}>
+        <p className="text-label" style={{ 
+          color: 'var(--color-primary)', 
+          fontSize: isMobile ? '16px' : '24px', 
+          letterSpacing: '0.2em' 
+        }}>
           ABIMANYU
         </p>
         <h1 
           className="text-display-lg" 
           style={{ 
-            fontSize: '12vw', 
+            fontSize: isMobile ? '20vw' : '12vw', 
             lineHeight: 1, 
             margin: 0, 
             color: 'white' 

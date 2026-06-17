@@ -4,6 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function WorkSection() {
   const [activeProject, setActiveProject] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (activeProject) {
@@ -71,22 +79,27 @@ export default function WorkSection() {
   ];
 
   return (
-    <section id="work" style={{ padding: '120px 0', background: 'var(--color-bg)', zIndex: 15, position: 'relative' }}>
+    <section id="work" style={{ padding: 'var(--spacing-section) 0', background: 'var(--color-bg)', zIndex: 15, position: 'relative' }}>
       <div className="container" style={{ padding: '0 var(--spacing-gutter)' }}>
         
         {/* Section Intro */}
-        <div style={{ marginBottom: '80px', maxWidth: '600px' }}>
-          <h2 className="text-headline-md" style={{ fontSize: '48px', margin: '0 0 24px 0' }}>Proyek Terpilih.</h2>
+        <div style={{ marginBottom: isMobile ? '40px' : '80px', maxWidth: '600px' }}>
+          <h2 className="text-headline-md" style={{ 
+            fontSize: isMobile ? '28px' : '48px', 
+            margin: '0 0 16px 0' 
+          }}>
+            Proyek Terpilih.
+          </h2>
           <p className="text-body-lg" style={{ color: 'var(--color-text-secondary)' }}>
             Fokus pada fungsionalitas sistem dan kenyamanan pengguna.
           </p>
         </div>
 
-        {/* Standard Grid Layout */}
+        {/* Project Grid — single column on mobile */}
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
-          gap: '64px 40px' 
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))', 
+          gap: isMobile ? '48px' : '64px 40px' 
         }}>
           {projects.map((project, idx) => (
             <motion.div 
@@ -95,9 +108,9 @@ export default function WorkSection() {
               onClick={() => setActiveProject(project)}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              whileHover="hover"
+              viewport={{ once: true, margin: "0px" }}
+              transition={{ duration: 0.6, delay: isMobile ? 0 : idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              whileHover={isMobile ? undefined : "hover"}
               style={{
                 display: 'block',
                 cursor: 'pointer'
@@ -108,12 +121,12 @@ export default function WorkSection() {
                 layoutId={`project-image-container-${project.id}`}
                 style={{ 
                   width: '100%', 
-                  aspectRatio: '4/3', 
-                  borderRadius: 'var(--radius-lg)', 
+                  aspectRatio: isMobile ? '16/10' : '4/3', 
+                  borderRadius: isMobile ? '16px' : 'var(--radius-lg)', 
                   overflow: 'hidden',
                   background: 'var(--color-surface)',
                   border: '1px solid var(--color-border)',
-                  marginBottom: '24px',
+                  marginBottom: isMobile ? '16px' : '24px',
                   position: 'relative'
                 }}>
                 <motion.img 
@@ -121,7 +134,7 @@ export default function WorkSection() {
                   src={project.image} 
                   alt={project.title}
                   variants={{
-                    hover: { scale: 1.03 } // Subtle zoom on hover
+                    hover: { scale: 1.03 }
                   }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -130,11 +143,11 @@ export default function WorkSection() {
 
               {/* Text Info */}
               <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                  <motion.h3 layoutId={`project-title-${project.id}`} className="text-headline-md" style={{ fontSize: '24px', margin: 0 }}>{project.title}</motion.h3>
-                  <span className="text-label" style={{ color: 'var(--color-text-secondary)', marginTop: '6px' }}>{project.year}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px' }}>
+                  <motion.h3 layoutId={`project-title-${project.id}`} className="text-headline-md" style={{ fontSize: isMobile ? '18px' : '24px', margin: 0, lineHeight: '1.3' }}>{project.title}</motion.h3>
+                  <span className="text-label" style={{ color: 'var(--color-text-secondary)', marginTop: '4px', flexShrink: 0, marginLeft: '12px' }}>{project.year}</span>
                 </div>
-                <motion.p layoutId={`project-category-${project.id}`} className="text-label" style={{ color: 'var(--color-primary)', margin: 0 }}>{project.category}</motion.p>
+                <motion.p layoutId={`project-category-${project.id}`} className="text-label" style={{ color: 'var(--color-primary)', margin: 0, fontSize: isMobile ? '11px' : '12px' }}>{project.category}</motion.p>
               </div>
             </motion.div>
           ))}
@@ -150,110 +163,117 @@ export default function WorkSection() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setActiveProject(null)}
-            onWheel={(e) => e.stopPropagation()}
-            onTouchMove={(e) => e.stopPropagation()}
-            style={{
-              position: 'fixed',
-              inset: 0,
-              background: 'rgba(0,0,0,0.8)',
-              backdropFilter: 'blur(8px)',
-              zIndex: 9999,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '24px'
-            }}
-          >
-            <motion.div 
-              layoutId={`project-container-${activeProject.id}`}
-              onClick={(e) => e.stopPropagation()}
+              onWheel={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
               style={{
-                background: 'var(--color-bg)',
-                borderRadius: 'var(--radius-lg)',
-                width: '100%',
-                maxWidth: '800px',
-                maxHeight: '90vh',
-                overflowY: 'auto',
-                overscrollBehavior: 'contain',
-                border: '1px solid var(--color-border)',
+                position: 'fixed',
+                inset: 0,
+                background: 'rgba(0,0,0,0.8)',
+                backdropFilter: 'blur(8px)',
+                zIndex: 9999,
                 display: 'flex',
-                flexDirection: 'column',
-                position: 'relative'
+                alignItems: isMobile ? 'flex-end' : 'center',
+                justifyContent: 'center',
+                padding: isMobile ? '0' : '24px'
               }}
             >
-              {/* Close Button */}
-              <button 
-                onClick={() => setActiveProject(null)}
+              <motion.div 
+                layoutId={`project-container-${activeProject.id}`}
+                onClick={(e) => e.stopPropagation()}
                 style={{
-                  position: 'absolute',
-                  top: '16px',
-                  right: '16px',
-                  background: 'rgba(0,0,0,0.5)',
-                  border: 'none',
-                  color: 'white',
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
+                  background: 'var(--color-bg)',
+                  borderRadius: isMobile ? '20px 20px 0 0' : 'var(--radius-lg)',
+                  width: '100%',
+                  maxWidth: isMobile ? '100%' : '800px',
+                  maxHeight: isMobile ? '92vh' : '90vh',
+                  overflowY: 'auto',
+                  overscrollBehavior: 'contain',
+                  border: '1px solid var(--color-border)',
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  zIndex: 10,
-                  fontSize: '16px',
-                  backdropFilter: 'blur(4px)'
+                  flexDirection: 'column',
+                  position: 'relative'
                 }}
               >
-                ✕
-              </button>
+                {/* Close Button */}
+                <button 
+                  onClick={() => setActiveProject(null)}
+                  style={{
+                    position: 'absolute',
+                    top: '12px',
+                    right: '12px',
+                    background: 'rgba(0,0,0,0.6)',
+                    border: 'none',
+                    color: 'white',
+                    width: isMobile ? '36px' : '32px',
+                    height: isMobile ? '36px' : '32px',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    zIndex: 10,
+                    fontSize: '16px',
+                    backdropFilter: 'blur(4px)'
+                  }}
+                >
+                  ✕
+                </button>
 
-              <motion.div 
-                layoutId={`project-image-container-${activeProject.id}`}
-                style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}
-              >
-                <motion.img 
-                  layoutId={`project-image-${activeProject.id}`}
-                  src={activeProject.image} 
-                  alt={activeProject.title}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
+                {/* Drag Handle for mobile */}
+                {isMobile && (
+                  <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 4px' }}>
+                    <div style={{ width: '40px', height: '4px', borderRadius: '2px', background: 'var(--color-border)' }} />
+                  </div>
+                )}
+
+                <motion.div 
+                  layoutId={`project-image-container-${activeProject.id}`}
+                  style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', flexShrink: 0 }}
+                >
+                  <motion.img 
+                    layoutId={`project-image-${activeProject.id}`}
+                    src={activeProject.image} 
+                    alt={activeProject.title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </motion.div>
+
+                <div style={{ padding: isMobile ? '20px 16px 32px' : '32px' }}>
+                  <div style={{ marginBottom: isMobile ? '16px' : '24px' }}>
+                    <motion.h3 layoutId={`project-title-${activeProject.id}`} className="text-headline-md" style={{ fontSize: isMobile ? '22px' : '32px', margin: '0 0 8px 0' }}>{activeProject.title}</motion.h3>
+                    <motion.p layoutId={`project-category-${activeProject.id}`} className="text-label" style={{ color: 'var(--color-primary)', margin: 0 }}>{activeProject.category} • {activeProject.year}</motion.p>
+                  </div>
+
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: isMobile ? '20px' : '32px' }}>
+                    {activeProject.techStack.map((tech, idx) => (
+                      <span 
+                        key={idx} 
+                        style={{ 
+                          padding: '5px 10px', 
+                          borderRadius: 'var(--radius-full)', 
+                          border: '1px solid var(--color-border)', 
+                          color: 'var(--color-text-secondary)', 
+                          fontSize: isMobile ? '11px' : '12px',
+                        }}
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+
+                  <p className="text-body-lg" style={{ color: 'var(--color-text-primary)', marginBottom: isMobile ? '20px' : '32px', lineHeight: '1.6', fontSize: isMobile ? '14px' : undefined }}>
+                    {activeProject.description}
+                  </p>
+
+                  <h4 style={{ fontSize: isMobile ? '15px' : '18px', fontWeight: '600', marginBottom: '12px', color: 'var(--color-text-primary)' }}>Fitur Utama</h4>
+                  <ul style={{ paddingLeft: '20px', color: 'var(--color-text-secondary)', display: 'flex', flexDirection: 'column', gap: '6px', margin: 0, fontSize: isMobile ? '14px' : undefined }}>
+                    {activeProject.features.map((feature, idx) => (
+                      <li key={idx} style={{ lineHeight: '1.5' }}>{feature}</li>
+                    ))}
+                  </ul>
+                </div>
               </motion.div>
-
-              <div style={{ padding: '32px' }}>
-                <div style={{ marginBottom: '24px' }}>
-                  <motion.h3 layoutId={`project-title-${activeProject.id}`} className="text-headline-md" style={{ fontSize: '32px', margin: '0 0 8px 0' }}>{activeProject.title}</motion.h3>
-                  <motion.p layoutId={`project-category-${activeProject.id}`} className="text-label" style={{ color: 'var(--color-primary)', margin: 0 }}>{activeProject.category} • {activeProject.year}</motion.p>
-                </div>
-
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '32px' }}>
-                  {activeProject.techStack.map((tech, idx) => (
-                    <span 
-                      key={idx} 
-                      style={{ 
-                        padding: '6px 12px', 
-                        borderRadius: 'var(--radius-full)', 
-                        border: '1px solid var(--color-border)', 
-                        color: 'var(--color-text-secondary)', 
-                        fontSize: '12px',
-                      }}
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                <p className="text-body-lg" style={{ color: 'var(--color-text-primary)', marginBottom: '32px', lineHeight: '1.6' }}>
-                  {activeProject.description}
-                </p>
-
-                <h4 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px', color: 'var(--color-text-primary)' }}>Fitur Utama</h4>
-                <ul style={{ paddingLeft: '20px', color: 'var(--color-text-secondary)', display: 'flex', flexDirection: 'column', gap: '8px', margin: 0 }}>
-                  {activeProject.features.map((feature, idx) => (
-                    <li key={idx} style={{ lineHeight: '1.5' }}>{feature}</li>
-                  ))}
-                </ul>
-              </div>
             </motion.div>
-          </motion.div>
           )}
         </AnimatePresence>,
         document.body

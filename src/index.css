@@ -50,6 +50,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -121,11 +122,53 @@ a {
   color: #fff;
 }
 
+/* ==========================================
+   MOBILE RESPONSIVE — Tablet (≤768px)
+   ========================================== */
 @media (max-width: 768px) {
+  :root {
+    --spacing-section: 80px;
+    --spacing-gutter: 20px;
+    --spacing-container: 100%;
+  }
+
   .text-display-lg {
-    font-size: 48px;
-    line-height: 52px;
-    letter-spacing: -0.03em;
+    font-size: 36px !important;
+    line-height: 42px !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  .text-headline-md {
+    font-size: 28px !important;
+    line-height: 36px !important;
+  }
+
+  .text-body-lg {
+    font-size: 16px !important;
+  }
+}
+
+/* ==========================================
+   MOBILE RESPONSIVE — Small Phones (≤480px)
+   ========================================== */
+@media (max-width: 480px) {
+  :root {
+    --spacing-section: 64px;
+    --spacing-gutter: 16px;
+  }
+
+  .text-display-lg {
+    font-size: 30px !important;
+    line-height: 36px !important;
+  }
+
+  .text-headline-md {
+    font-size: 24px !important;
+    line-height: 32px !important;
+  }
+
+  .text-body-lg {
+    font-size: 15px !important;
   }
 }
 
@@ -139,27 +182,19 @@ a {
   text-shadow: 0 0 8px rgba(255, 95, 46, 0.4);
 }
 
-/* Secret Cyberpunk Theme Overrides */
-body.cyberpunk-mode {
-  --color-bg: #05020a;
-  --color-surface: #100421;
-  --color-surface-elevated: #1b0738;
-  --color-primary: #00f3ff;
-  --color-primary-dim: #00f3ff33;
-  --color-secondary: #ff00ff;
-  --color-text-primary: #e0d5f2;
-  --color-border: #ff00ff44;
-  --font-display: 'JetBrains Mono', monospace;
-  background-color: var(--color-bg);
-}
-
-body.cyberpunk-mode .text-display-lg,
-body.cyberpunk-mode .text-headline-md {
-  text-shadow: 3px 3px 0px rgba(255, 0, 255, 0.8), -3px -3px 0px rgba(0, 243, 255, 0.8);
-  font-style: italic;
-  letter-spacing: -0.05em;
-}
-
-body.cyberpunk-mode img {
-  filter: hue-rotate(180deg) saturate(2) contrast(1.2) !important;
+/* Easter Egg Overlay */
+.easter-egg-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, #1a0a2e 0%, #0a0a0a 100%);
+  text-align: center;
+  padding: 24px;
 }

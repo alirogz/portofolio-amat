@@ -18,7 +18,7 @@ export default function TextReveal({ text, delay = 0, style = {} }) {
           <motion.span
             initial={{ y: '100%', rotate: 5 }}
             whileInView={{ y: 0, rotate: 0 }}
-            viewport={{ once: true, margin: "-10%" }}
+            viewport={{ once: true, margin: "0px" }}
             transition={{
               duration: 1,
               ease: [0.16, 1, 0.3, 1], // Beautiful custom cubic-bezier
