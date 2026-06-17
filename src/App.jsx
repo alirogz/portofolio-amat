@@ -132,17 +132,23 @@ function App() {
               textAlign: isMobile ? 'center' : 'left'
             }}
           >
-            <div style={{ marginBottom: '12px' }}>
-              <TextReveal 
-                text="Creative Developer & UI/UX Designer" 
+            <div style={{ marginBottom: '16px' }}>
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.8 }}
                 style={{ 
-                  color: 'var(--color-text-secondary)', 
-                  fontFamily: 'var(--font-display)', 
-                  fontSize: isMobile ? '14px' : 'clamp(24px, 4vw, 32px)', 
+                  color: 'var(--color-primary)', 
+                  fontFamily: 'var(--font-label)', 
+                  fontSize: isMobile ? '12px' : '14px', 
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
                   fontWeight: '600',
-                  justifyContent: isMobile ? 'center' : 'flex-start'
+                  margin: 0
                 }} 
-              />
+              >
+                Creative Developer & UI/UX Designer
+              </motion.p>
             </div>
             
             <h1 className="text-display-lg" style={{ marginBottom: isMobile ? '20px' : '32px' }}>
